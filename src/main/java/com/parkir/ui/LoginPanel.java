@@ -81,7 +81,7 @@ public class LoginPanel extends JPanel {
         JLabel lblUser = new JLabel("Username");
         lblUser.setFont(UITheme.FONT_BOLD);
         lblUser.setForeground(UITheme.TEXT_MAIN);
-        lblUser.setAlignmentX(Component.LEFT_ALIGNMENT);
+        lblUser.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         tfUsername = new JTextField();
         UITheme.styleField(tfUsername);
@@ -91,7 +91,7 @@ public class LoginPanel extends JPanel {
         JLabel lblPass = new JLabel("Password");
         lblPass.setFont(UITheme.FONT_BOLD);
         lblPass.setForeground(UITheme.TEXT_MAIN);
-        lblPass.setAlignmentX(Component.LEFT_ALIGNMENT);
+        lblPass.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         tfPassword = new JPasswordField();
         UITheme.styleField(tfPassword);
@@ -104,8 +104,13 @@ public class LoginPanel extends JPanel {
         lblError.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         btnLogin = UITheme.createPrimaryButton("Masuk");
-        btnLogin.setMaximumSize(new Dimension(Integer.MAX_VALUE, 42));
-        btnLogin.setAlignmentX(Component.LEFT_ALIGNMENT);
+        btnLogin.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
+        btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // JLabel lblHint = new JLabel("Default admin: admin / admin123");
+        // lblHint.setFont(UITheme.FONT_SMALL);
+        // lblHint.setForeground(UITheme.TEXT_MUTED);
+        // lblHint.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         btnLogin.addActionListener(e -> executeLogin());
         KeyAdapter enterKey = new KeyAdapter() {
