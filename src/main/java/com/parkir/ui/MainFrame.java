@@ -33,7 +33,6 @@ public class MainFrame extends JFrame {
     private JPanel mainContentPanel;
     private CardLayout contentCardLayout;
 
-    // View panels
     private DashboardPanel dashboardPanel;
     private KendaraanMasukPanel masukPanel;
     private KendaraanKeluarPanel keluarPanel;
@@ -45,6 +44,7 @@ public class MainFrame extends JFrame {
 
     private JLabel lblUserBadge;
     private final Map<Fitur, JButton> menuButtons = new HashMap<>();
+    private final Map<String, JButton> navButtons = new HashMap<>();
 
     public MainFrame(AuthService authService,
                      ParkirService parkirService,
@@ -66,8 +66,8 @@ public class MainFrame extends JFrame {
     private void initFrame() {
         setTitle("Sistem Parkir Modern");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1100, 700);
-        setMinimumSize(new Dimension(950, 600));
+        setSize(1200, 760);
+        setMinimumSize(new Dimension(1000, 640));
         setLocationRelativeTo(null);
     }
 
@@ -75,20 +75,17 @@ public class MainFrame extends JFrame {
         rootCardLayout = new CardLayout();
         rootCardPanel = new JPanel(rootCardLayout);
 
-        // 1. Login View
         loginPanel = new LoginPanel(authService, this::onLoginSuccess);
         rootCardPanel.add(loginPanel, "LOGIN");
 
-        // 2. App Main View (Sidebar + Content)
         appContainerPanel = new JPanel(new BorderLayout());
 
-        // Sidebar
         sidebarPanel = createSidebar();
         appContainerPanel.add(sidebarPanel, BorderLayout.WEST);
 
-        // Content Area
         contentCardLayout = new CardLayout();
         mainContentPanel = new JPanel(contentCardLayout);
+        mainContentPanel.setBackground(UITheme.BG_APP);
 
         Runnable refreshAll = this::refreshActiveViews;
 
@@ -118,43 +115,43 @@ public class MainFrame extends JFrame {
     }
 
     private JPanel createSidebar() {
-        JPanel sidebar = new JPanel();
-        sidebar.setPreferredSize(new Dimension(240, Integer.MAX_VALUE));
+        JPanel sidebar = new JPanel(new BorderLayout());
+        sidebar.setPreferredSize(new Dimension(250, 0));
         sidebar.setBackground(UITheme.BG_DARK);
-        sidebar.setLayout(new BorderLayout());
 
-        // Header Sidebar: Logo & App Title
+        // Header
         JPanel top = new JPanel();
         top.setOpaque(false);
         top.setLayout(new BoxLayout(top, BoxLayout.Y_AXIS));
-        top.setBorder(BorderFactory.createEmptyBorder(20, 16, 20, 16));
+        top.setBorder(BorderFactory.createEmptyBorder(24, 20, 20, 20));
 
         JLabel lblLogo = new JLabel("PARKIR SYSTEM");
-        lblLogo.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        lblLogo.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lblLogo.setForeground(Color.WHITE);
+        lblLogo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         lblUserBadge = new JLabel("Petugas: -");
         lblUserBadge.setFont(UITheme.FONT_SMALL);
         lblUserBadge.setForeground(UITheme.TEXT_MUTED);
+        lblUserBadge.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         top.add(lblLogo);
-        top.add(Box.createVerticalStrut(4));
+        top.add(Box.createVerticalStrut(6));
         top.add(lblUserBadge);
-
         sidebar.add(top, BorderLayout.NORTH);
 
-        // Menu Navigasi
+        // Menu
         JPanel menuList = new JPanel();
         menuList.setOpaque(false);
         menuList.setLayout(new BoxLayout(menuList, BoxLayout.Y_AXIS));
-        menuList.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        menuList.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 12));
 
-        // Tombol Dashboard selalu ada untuk semua peran
-        JButton btnDash = createMenuButton("Dashboard", e -> switchContent("DASHBOARD"));
+        JButton btnDash = UITheme.createMenuButton("Dashboard");
+        btnDash.addActionListener(e -> switchContent("DASHBOARD"));
+        navButtons.put("DASHBOARD", btnDash);
         menuList.add(btnDash);
-        menuList.add(Box.createVerticalStrut(4));
+        menuList.add(Box.createVerticalStrut(6));
 
-        // Tombol per fitur (dikontrol oleh hak akses)
         addMenuFeature(menuList, Fitur.CATAT_MASUK, "Kendaraan Masuk");
         addMenuFeature(menuList, Fitur.CATAT_KELUAR, "Kendaraan Keluar");
         addMenuFeature(menuList, Fitur.LIHAT_PARKIR, "Daftar Parkir");
@@ -165,10 +162,10 @@ public class MainFrame extends JFrame {
 
         sidebar.add(menuList, BorderLayout.CENTER);
 
-        // Bottom: Tombol Keluar / Logout
+        // Logout
         JPanel bot = new JPanel(new BorderLayout());
         bot.setOpaque(false);
-        bot.setBorder(BorderFactory.createEmptyBorder(12, 10, 16, 10));
+        bot.setBorder(BorderFactory.createEmptyBorder(12, 12, 20, 12));
 
         JButton btnLogout = UITheme.createDangerButton("Keluar (Logout)");
         btnLogout.addActionListener(e -> logout());
@@ -179,28 +176,19 @@ public class MainFrame extends JFrame {
     }
 
     private void addMenuFeature(JPanel container, Fitur fitur, String label) {
-        JButton btn = createMenuButton(label, e -> switchContent(fitur.name()));
+        JButton btn = UITheme.createMenuButton(label);
+        btn.addActionListener(e -> switchContent(fitur.name()));
         menuButtons.put(fitur, btn);
+        navButtons.put(fitur.name(), btn);
         container.add(btn);
-        container.add(Box.createVerticalStrut(4));
-    }
-
-    private JButton createMenuButton(String text, java.awt.event.ActionListener al) {
-        JButton btn = new JButton(text);
-        btn.setFont(UITheme.FONT_BOLD);
-        btn.setForeground(new Color(203, 213, 225));
-        btn.setBackground(UITheme.BG_DARK);
-        btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createEmptyBorder(10, 14, 10, 14));
-        btn.setHorizontalAlignment(SwingConstants.LEFT);
-        btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btn.addActionListener(al);
-        return btn;
+        container.add(Box.createVerticalStrut(6));
     }
 
     private void switchContent(String cardName) {
         contentCardLayout.show(mainContentPanel, cardName);
+        for (Map.Entry<String, JButton> entry : navButtons.entrySet()) {
+            UITheme.setMenuActive(entry.getValue(), entry.getKey().equals(cardName));
+        }
         refreshActiveViews();
     }
 
@@ -208,12 +196,9 @@ public class MainFrame extends JFrame {
         this.currentUser = user;
         lblUserBadge.setText(user.getNama() + " (" + user.getPeran() + ")");
 
-        // Context pengguna ke panel yang membutuhkan
         masukPanel.setCurrentUser(user);
         kelolaPetugasPanel.setCurrentUser(user);
 
-        // Aturan penting sesuai dokumen: Hak akses ditentukan oleh bolehMengakses(Fitur)
-        // bukan if peran yang tersebar di GUI
         for (Map.Entry<Fitur, JButton> entry : menuButtons.entrySet()) {
             boolean boleh = user.bolehMengakses(entry.getKey());
             entry.getValue().setVisible(boleh);
