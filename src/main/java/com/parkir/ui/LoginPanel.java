@@ -75,10 +75,10 @@ public class LoginPanel extends JPanel {
         btnLogin.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
         btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel lblHint = new JLabel("Default admin: admin / admin123");
-        lblHint.setFont(UITheme.FONT_SMALL);
-        lblHint.setForeground(UITheme.TEXT_MUTED);
-        lblHint.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // JLabel lblHint = new JLabel("Default admin: admin / admin123");
+        // lblHint.setFont(UITheme.FONT_SMALL);
+        // lblHint.setForeground(UITheme.TEXT_MUTED);
+        // lblHint.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Pasang listener
         btnLogin.addActionListener(e -> executeLogin());
