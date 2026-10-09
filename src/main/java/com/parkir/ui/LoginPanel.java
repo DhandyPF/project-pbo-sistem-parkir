@@ -48,7 +48,7 @@ public class LoginPanel extends JPanel {
         JLabel lblUser = new JLabel("Username");
         lblUser.setFont(UITheme.FONT_BOLD);
         lblUser.setForeground(UITheme.TEXT_MAIN);
-        lblUser.setAlignmentX(Component.LEFT_ALIGNMENT);
+        lblUser.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         tfUsername = new JTextField();
         tfUsername.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
@@ -58,7 +58,7 @@ public class LoginPanel extends JPanel {
         JLabel lblPass = new JLabel("Password");
         lblPass.setFont(UITheme.FONT_BOLD);
         lblPass.setForeground(UITheme.TEXT_MAIN);
-        lblPass.setAlignmentX(Component.LEFT_ALIGNMENT);
+        lblPass.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         tfPassword = new JPasswordField();
         tfPassword.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
